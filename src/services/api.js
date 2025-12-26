@@ -9,7 +9,7 @@ const api = axios.create({
   },
 });
 
-// 🔐 Attach JWT token
+// 🔐 Attach JWT token automatically
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -18,17 +18,17 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401
+// Handle 401 globally
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.clear();
+      window.location.href = "/login"; // redirect to login on token expiration
     }
     return Promise.reject(err);
   }
 );
-
 
 // ================= AUTH APIs =================
 export const authAPI = {
@@ -50,10 +50,8 @@ export const eventAPI = {
 
 // ================= POLL APIs =================
 export const pollAPI = {
-  vote: (pollId, optionIndex) =>
-    api.post(`/polls/${pollId}/vote`, { optionIndex }),
-  getResults: (pollId) =>
-    api.get(`/polls/${pollId}/results`),
+  vote: (pollId, optionIndex) => api.post(`/polls/${pollId}/vote`, { optionIndex }),
+  getResults: (pollId) => api.get(`/polls/${pollId}/results`),
 };
 
 export default api;
