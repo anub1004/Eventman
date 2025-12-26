@@ -1,0 +1,66 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+@layer base {
+  body {
+    @apply min-h-screen bg-gray-50 text-gray-800 antialiased;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+  }
+}
+
+/* Components */
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl p-6 shadow-md border border-gray-100
+           hover:shadow-lg transition-shadow duration-300;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl
+           px-5 py-2.5 text-sm font-semibold
+           transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700 shadow;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+
+  .form-input {
+    @apply w-full rounded-xl border border-gray-300 px-4 py-2.5
+           focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30;
+  }
+
+  .badge {
+    @apply inline-flex rounded-full px-3 py-1 text-xs font-semibold;
+  }
+
+  .badge-active {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .poll-option {
+    @apply border border-gray-200 rounded-xl p-4
+           hover:border-blue-500 hover:bg-blue-50
+           transition cursor-pointer;
+  }
+
+  .poll-option.selected {
+    @apply border-blue-600 bg-blue-50 ring-2 ring-blue-500/30;
+  }
+}
