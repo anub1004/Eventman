@@ -1,61 +1,59 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
+    if (!email || !password) {
+      setError("Email and password required");
+      return;
+    }
+
     try {
-      await login(formData.email, formData.password);
-      setLoading(false);
-      navigate("/dashboard"); // redirect after login
+      setLoading(true);
+      await login(email, password);
+      navigate("/dashboard");
     } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
       setLoading(false);
-      setError(err.message);
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
+
+      {error && <p className="text-red-500 mb-3">{error}</p>}
+
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full border p-2 mb-3 rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full border p-2 mb-4 rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
         <button
           type="submit"
           disabled={loading}

@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const ProtectedLayout = () => {
+const PrivateRoute = () => {
   const { user, loading } = useAuth();
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (loading) return null;
 
-  return <Outlet />;
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
-export default ProtectedLayout;
+export default PrivateRoute;
+
