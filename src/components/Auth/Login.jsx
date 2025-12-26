@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,22 +17,22 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(email.trim(), password);
+      await login(email.trim(), password.trim());
       navigate("/dashboard", { replace: true });
     } catch (err) {
-      setError(err.message);
+      setError(err?.message || "Failed to login. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded shadow w-96"
       >
-        <h2 className="text-2xl mb-4">Login</h2>
+        <h2 className="text-2xl mb-4 font-semibold">Login</h2>
 
         {error && <p className="text-red-500 mb-3">{error}</p>}
 
@@ -42,7 +40,8 @@ const Login = () => {
           type="email"
           placeholder="Email"
           required
-          className="w-full mb-3 p-2 border"
+          autoFocus
+          className="w-full mb-3 p-2 border rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -51,19 +50,19 @@ const Login = () => {
           type="password"
           placeholder="Password"
           required
-          className="w-full mb-4 p-2 border"
+          className="w-full mb-4 p-2 border rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded"
+          className={`w-full py-2 rounded text-white ${loading ? "bg-blue-300" : "bg-blue-600"}`}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="mt-4 text-sm">
+        <p className="mt-4 text-sm text-center">
           No account? <Link to="/signup" className="text-blue-600">Signup</Link>
         </p>
       </form>
